@@ -7,19 +7,31 @@ const fastify = Fastify({
   logger: true
 });
 
+const tasks = []
+
 fastify.register(fastifyView, {
   engine: {
-    pug: pug
+    pug: pug,
   },
   root: path.join(__dirname, 'templates'), // Points to the 'views' directory
   propertyName: 'render' // Access the render function via reply.render()
 });
 
 fastify.get('/', (request, reply) => {
-  reply.render('index.pug', {
-    title: 'Fastify Pug Example',
-    message: 'Hello from Fastify and Pug!'
-  });
+  reply.render('index.pug', { tasks, title: 'TaskBoard' });
+});
+
+fastify.get('/add', (request, reply) => {
+  const name = request.query.task
+  tasks.push({ id: tasks.length, name })
+  reply.redirect('/')
+});
+
+fastify.get('/delete', (request, reply) => {
+  const deleteId = request.query.index
+  const updatedTasks = tasks.filter(e => e.id != deleteId)
+  tasks.splice(0, tasks.length, ...updatedTasks)
+  reply.redirect('/')
 });
 
 
