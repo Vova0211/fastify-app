@@ -1,7 +1,9 @@
 const path = require('path');
 const Fastify = require('fastify');
 const fastifyView = require('@fastify/view');
+const fastifyStatic = require('@fastify/static')
 const pug = require('pug');
+// const { v4: uuidv4 } = require('uuid')
 
 const fastify = Fastify({
   logger: true
@@ -9,25 +11,30 @@ const fastify = Fastify({
 
 const tasks = []
 
+fastify.register(fastifyStatic, {
+  root: path.join(__dirname, 'src'),
+  prefix: '/src/',
+})
+
 fastify.register(fastifyView, {
   engine: {
     pug: pug,
   },
-  root: path.join(__dirname, 'templates'), // Points to the 'views' directory
-  propertyName: 'render' // Access the render function via reply.render()
+  root: path.join(__dirname, 'templates'),
+  propertyName: 'render'
 });
 
 fastify.get('/', (request, reply) => {
-  reply.render('index.pug', { tasks, title: 'TaskBoard' });
+  reply.render('index.pug', { tasks, title: 'TaskBoard'});
 });
 
-fastify.get('/add', (request, reply) => {
-  const name = request.query.task
+fastify.post('/add', (request, reply) => {
+  const name = JSON.parse(request.body).data
   tasks.push({ id: tasks.length, name })
-  reply.redirect('/')
+  reply.status(201).redirect('/')
 });
 
-fastify.get('/delete', (request, reply) => {
+fastify.delete('/delete', (request, reply) => {
   const deleteId = request.query.index
   const updatedTasks = tasks.filter(e => e.id != deleteId)
   tasks.splice(0, tasks.length, ...updatedTasks)

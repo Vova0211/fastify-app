@@ -4,14 +4,15 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title= title
-        
+        script(src='/src/index.js', defer)
+
     body 
         h1 Список задач
         ul.tasks
             if tasks !== 0
                 each task in tasks
                     li(id=task.id)= task.name
-                        a(href=`/delete?index=${task.id}`) Удалить
-        form(action='/add')
+                        a Удалить
+        form
             input(type="text", name='task')
             button(type="submit") Создать 
