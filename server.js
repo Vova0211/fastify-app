@@ -3,7 +3,7 @@ const Fastify = require('fastify');
 const fastifyView = require('@fastify/view');
 const fastifyStatic = require('@fastify/static')
 const pug = require('pug');
-// const { v4: uuidv4 } = require('uuid')
+const { v4: uuidv4 } = require('uuid')
 
 const fastify = Fastify({
   logger: true
@@ -30,15 +30,15 @@ fastify.get('/', (request, reply) => {
 
 fastify.post('/add', (request, reply) => {
   const name = JSON.parse(request.body).data
-  tasks.push({ id: tasks.length, name })
-  reply.status(201).redirect('/')
+  tasks.push({ id: uuidv4(), name })
+  reply.status(201).send()
 });
 
-fastify.delete('/delete', (request, reply) => {
-  const deleteId = request.query.index
+fastify.delete('/delete/:id', (request, reply) => {
+  const deleteId = request.params.id
   const updatedTasks = tasks.filter(e => e.id != deleteId)
   tasks.splice(0, tasks.length, ...updatedTasks)
-  reply.redirect('/')
+  reply.status(204).send()
 });
 
 

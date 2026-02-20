@@ -12,7 +12,7 @@ html(lang="en")
             if tasks !== 0
                 each task in tasks
                     li(id=task.id)= task.name
-                        a Удалить
+                        a(href='/', class='btn_delete') Удалить
         form
             input(type="text", name='task')
             button(type="submit") Создать 

@@ -4,8 +4,11 @@ document.querySelector('form').addEventListener('submit', async e => {
     await fetch('/add', {method: 'POST', body: JSON.stringify({data})})
     location.reload()
 })
-document.querySelector('a').addEventListener('click', async e => {
-    const li = e.target.parentNode()
-    await fetch('/add', {method: 'DELETE', body: JSON.stringify({data})})
-    location.reload()
+document.querySelectorAll('.btn_delete').forEach(btn => {
+    btn.addEventListener('click', async e => {
+        e.preventDefault()
+        const id = e.target.parentNode.id
+        await fetch(`/delete/${id}`, { method: 'DELETE' })
+        location.reload()
+    })
 })
