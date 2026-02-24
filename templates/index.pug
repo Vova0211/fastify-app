@@ -3,7 +3,7 @@ html(lang="en")
     head
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title= title
+        title название
         script(src='/src/index.js', defer)
 
     body 
@@ -11,8 +11,11 @@ html(lang="en")
         ul.tasks
             if tasks !== 0
                 each task in tasks
-                    li(id=task.id)= task.name
+                    li(id=task.id)= task.title
                         a(href='/', class='btn_delete') Удалить
+                        input(type="text", name='title', class='title', placeholder='Новое название')
+                        input(type="checkbox", name="completed", class='completed', checked= task.completed)
+                        a(href='/', class='btn_update') Изменить
         form
             input(type="text", name='task')
             button(type="submit") Создать 
