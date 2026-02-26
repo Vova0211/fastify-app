@@ -1,9 +1,12 @@
-const path = require('path');
-const Fastify = require('fastify');
-const fastifyView = require('@fastify/view');
-const fastifyStatic = require('@fastify/static')
-const pug = require('pug');
-const { v4: uuidv4 } = require('uuid')
+import path from 'path'
+import Fastify from 'fastify';
+import fastifyView from '@fastify/view'
+import fastifyStatic from '@fastify/static'
+import pug from 'pug'
+import { v4 as uuidv4 } from 'uuid';
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const fastify = Fastify({
   logger: true
