@@ -3,7 +3,7 @@ document.querySelector('form').addEventListener('submit', async e => {
     const title = e.target.task.value
     const resp = await fetch('/add', {method: 'POST', body: JSON.stringify({title}) })
     console.log(await resp.json())
-    location.reload()
+    if (resp.status == 201) location.reload()
 })
 document.querySelectorAll('.btn_delete').forEach(btn => {
     btn.addEventListener('click', async e => {
@@ -21,6 +21,6 @@ document.querySelectorAll('.btn_update').forEach(btn => {
         if (title == '') title = e.target.parentNode.firstChild.textContent
         const completed = e.target.parentNode.querySelector('.completed').checked
         const response = await fetch(`/update/${id}`, { method: 'PUT', body: JSON.stringify({ title, completed }) })
-        location.reload()
+        // location.reload()
     })
 })

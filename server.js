@@ -2,6 +2,7 @@ import path from 'path'
 import Fastify from 'fastify';
 import fastifyView from '@fastify/view'
 import fastifyStatic from '@fastify/static'
+import { object, string, boolean, date } from 'yup'
 import pug from 'pug'
 import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url'
@@ -51,14 +52,55 @@ fastify.get('/', (request, reply) => {
   reply.status(200).render('index.pug', { tasks });
 });
 
-fastify.post('/add', (request, reply) => {
-  const body = JSON.parse(request.body)
-  const task = { id: uuidv4(), title: body.title, completed: false }
+fastify.post('/add', {
+  attachValidation: true,
+  schema: {
+    body: object({
+      title: string().min(2)
+    })
+  },
+  validatorCompiler: ({ schema, method, url, httpPart }) => (data) => {
+    try {
+      const parsedData = JSON.parse(data)
+      const result = schema.validateSync(parsedData)
+      return { value: result }
+    }
+    catch (e) {
+      return { error: e }
+    }
+  }
+}, (request, reply) => {
+  const { title } = request.body
+  if (request.validationError) reply.status(400).send(request.validationError)
+
+  const task = { id: uuidv4(), title, completed: false }
   tasks.push(task)
   reply.status(201).send(task)
 });
 
-fastify.put('/update/:id', async (request, reply) => {
+fastify.put('/update/:id', {
+  attachValidation: true,
+  schema: {
+    body: object({
+      title: string().min(2),
+      completed: boolean().required()
+    }),
+    params: object({
+      id: string().required().length(36)
+    })
+  },
+  validatorCompiler: ({ schema, method, url, httpPart }) => (data) => {
+    try {
+      const parsedData = JSON.parse(data)
+
+      console.log('\n', data, '\n')
+      const result = schema.validateSync(parsedData)
+      return { value: result }
+    } catch(e) {
+      return { error: e }
+    }
+  }
+}, async (request, reply) => {
   const taskId = request.params.id
   const data = JSON.parse(request.body)
   validateTask(taskId, data, reply)
@@ -66,6 +108,7 @@ fastify.put('/update/:id', async (request, reply) => {
 
   reply.status(200).send({ message: 'OK' })
 });
+
 
 fastify.delete('/delete/:id', (request, reply) => {
   const taskId = request.params.id
