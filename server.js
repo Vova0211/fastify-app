@@ -8,7 +8,11 @@ import pug from 'pug'
 import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url'
 import bcrypt from 'bcrypt';
-import { updateTask } from './funcs.js';
+
+
+import { updateTask } from './src/funcs.js';
+// import { setRoutes } from './src/routes.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -38,7 +42,7 @@ fastify.register(fastifyView, {
 
 fastify.register(fastifyFormbody)
 
-
+// setRoutes(fastify, data)
 
 fastify.get('/registration', (request, reply) => {
   const { user } = data
@@ -136,7 +140,7 @@ const start = async () => {
   try {
     const settings = { port: 3000 }
     await fastify.listen(settings);
-    console.log(`Server listening on http://localhost:${settings.port}`);
+    console.log(`\nServer listening on http://localhost:${settings.port}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
