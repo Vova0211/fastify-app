@@ -3,19 +3,14 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    script(src="scripts/register.js" defer) 
-    title Регистрация
+    script(src="scripts/login.js" defer) 
+    title Вход
   body 
-    h1 Registration
-    form(id="registerForm")
+    h1 Log in
+    form(id="loginForm")
       h2 Login
       input(type="text", name='login', id='login', required) 
       h2 Password
       input(type="password", name="password", id='password', required) 
       button(type="submit") Send
     
-    if user.login.length != 0
-      p(class='login') Login: 
-        span=user.login
-      p(class='password') Password hash: 
-        span=user.password

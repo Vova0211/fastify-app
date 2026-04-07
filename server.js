@@ -3,7 +3,8 @@ import Fastify from 'fastify';
 import fastifyView from '@fastify/view'
 import fastifyStatic from '@fastify/static'
 import fastifyFormbody from '@fastify/formbody';
-import { object, string, boolean, date } from 'yup'
+import fastifyJwt from 'fastify-jwt';
+import { object, string, boolean } from 'yup'
 import pug from 'pug'
 import { v4 as uuidv4 } from 'uuid';
 import { fileURLToPath } from 'url'
@@ -26,10 +27,18 @@ const data = {
     password: '',
   }
 }
+const saltRounds = 8
+
+fastify.register(fastifyJwt, {
+  secret: 'supersecretkey',
+  sign: {
+    expiresIn: '1h'
+  }
+});
 
 fastify.register(fastifyStatic, {
-  root: path.join(__dirname, 'src'),
-  prefix: '/src/',
+  root: path.join(__dirname, 'scripts'),
+  prefix: '/scripts/',
 })
 
 fastify.register(fastifyView, {
@@ -40,29 +49,55 @@ fastify.register(fastifyView, {
   propertyName: 'render'
 });
 
+fastify.decorate("authenticate", async function(request, reply) {
+  try {
+    await request.jwtVerify();
+  } catch (err) {
+    reply.send(err);
+  }
+});
+
 fastify.register(fastifyFormbody)
 
-// setRoutes(fastify, data)
+fastify.get('/login', async (request, reply) => {
+  return reply.status(200).render('login.pug', {});
+})
 
-fastify.get('/registration', (request, reply) => {
+fastify.post('/login', async (request, reply) => {
+  const body = JSON.parse(request.body)
+  const { username, password } = body;
   const { user } = data
-  reply.status(200).render('register.pug', { user });
+  const uPassword = user.password
+  
+  if (username === user.login && await bcrypt.compare(password, uPassword)) {
+    const token = fastify.jwt.sign({ username, role: 'admin' });
+    return { token };
+  }
+
+  return reply.status(401).send({ error: 'Неверные данные' });
+});
+
+fastify.get('/register', (request, reply) => {
+  const { user } = data
+  return reply.status(200).render('register.pug', { user });
 })
 
 fastify.post('/register', async (request, reply) => {
-  const { login, password } = request.body
+  const body = JSON.parse(request.body)
+  const { login, password } = body
 
-  const saltRounds = 8
+ 
+    
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
   data.user = {
     login,
     password: passwordHash
   }
-  reply.status(201).redirect('/registration')
+  reply.status(201).send(data.user)
 })
 
-fastify.get('/', (request, reply) => {
+fastify.get('/', {preHandler: [fastify.authenticate]}, (request, reply) => {
   const tasks = data
   reply.status(200).render('index.pug', { tasks });
 });
