@@ -1,75 +1,17 @@
-import bcrypt from 'bcrypt'
+import { tasksGet, deleteTaskDelete, updateTaskPut, updateTaskPut_settings, addTaskPost, addTaskPost_settings } from "./models/tasks.js"
+import { loginGet, loginPost } from "./models/login.js"
+import { registerGet, registerPost } from "./models/register.js"
 
-import { updateTask, getData, updateData } from "./funcs.js"
-import { settings } from 'node:cluster';
-
-
-function registrationGet(request, reply) {
-    const { user } = getData()
-    reply.status(200).render('register.pug', { user });
-}
-
-async function registerPost(request, reply) {
-    const { login, password } = request.body
-
-    const saltRounds = 8
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-
-    const data = getData()
-    data.user = {
-        login,
-        password: passwordHash
-    }
-    updateData(data)
-
-    reply.redirect('/registration/')
-}
-
-function mainGet(request, reply) {
-    const { tasks } = getData()
-    reply.status(200).render('index.pug', { tasks });
-}
-
-function addTaskPost(request, reply) {
-    const { title } = request.body
-    const { tasks } = getData()
-    if (request.validationError) reply.status(400).send(request.validationError)
-
-    const task = { id: uuidv4(), title, completed: false }
-    tasks.push(task)
-    updateData(tasks)
-    reply.status(201).send(task)
-}
-
-const addTaskPost_settings = {
-  attachValidation: true,
-  schema: {
-    body: object({
-      title: string().min(2)
-    })
-  },
-  validatorCompiler: ({ schema, method, url, httpPart }) => (data) => {
-    try {
-      const parsedData = JSON.parse(data)
-      const result = schema.validateSync(parsedData)
-      return { value: result }
-    }
-    catch (e) {
-      return { error: e }
-    }
-  }
-}
-
-const routes = [
+const routesList = [
     {
         path: '/',
         method: 'get',
-        cb: mainGet
+        cb: tasksGet
     },
     {
-        path: '/registration',
+        path: '/register',
         method: 'get',
-        cb: registrationGet
+        cb: registerGet
     },
     {
         path: '/register',
@@ -81,7 +23,28 @@ const routes = [
         method: 'post',
         cb: addTaskPost,
         settings: addTaskPost_settings
-    }
+    },
+    {
+        path: '/update/:id',
+        method: 'put',
+        cb: updateTaskPut,
+        settings: updateTaskPut_settings
+    },
+    {
+        path: '/login',
+        method: 'get',
+        cb: loginGet
+    },
+    {
+        path: '/login',
+        method: 'post',
+        cb: loginPost
+    },
+    {
+        path: '/delete/:id',
+        method: 'delete',
+        cb: deleteTaskDelete
+    },
 ]
 
-export default routes
+export default routesList

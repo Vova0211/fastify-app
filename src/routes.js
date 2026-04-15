@@ -1,7 +1,8 @@
-import routes from "./crudFuncs.js"
-
-function setRoutes(fastify, data) {
-
+function setRoutes(fastify, routesList) {
+  routesList.forEach(route => {
+    const { path, method, cb, settings } = route
+    fastify[method](path, settings ?? {}, cb)
+  })
 }
 
-export { setRoutes }
+export default setRoutes

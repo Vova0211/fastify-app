@@ -1,7 +1,1 @@
-{
-  "tasks": [],
-  "user": {
-    "login": "",
-    "password": ""
-  }
-}
+{"tasks":[{"id":"0ffb883d-f40c-4f82-92a0-3dd4a0b6ce05","title":"12312312312","completed":true}],"user":{"login":"admin","password":"$2b$08$qXmKJiG3Kjro3dKj73/bZuWzazaYfcoYuXwu4xGmo0NqtaPJF6zvq"}}
