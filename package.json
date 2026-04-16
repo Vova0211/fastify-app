@@ -2,8 +2,10 @@
   "name": "fastify-app",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
+    "initDB": "node src/config/initDB.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

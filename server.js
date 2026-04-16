@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import { fileURLToPath } from 'url'
 
 import routesList from './src/crudFuncs.js';
-import setRoutes from './src/routes.js';
+import setRoutes from './src/setRoutes.js';
 import registerFastify from './src/registrations.js';
 
 const __filename = fileURLToPath(import.meta.url);

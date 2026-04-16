@@ -1,22 +1,24 @@
 import { object, string, boolean } from 'yup'
 import { v4 as uuidv4 } from 'uuid';
 
-import { updateTask, getData, updateData } from "../funcs.js"
+import { updateTask, getTasks, postTask, deleteTask } from "../funcsDB.js"
+
+const errorMessage = { error: 'Server error'}
 
 async function tasksGet(request, reply) {
-    const { tasks } = getData()
+    const tasks = await getTasks()
+    if (!tasks) return reply.status(500).send(errorMessage)
     return reply.status(200).render('index.pug', { tasks });
 }
 
 async function addTaskPost(request, reply) {
     const { title } = request.body
-    const data = getData()
     if (request.validationError) reply.status(400).send(request.validationError)
 
     const task = { id: uuidv4(), title, completed: false }
-    data.tasks.push(task)
-    updateData(data)
-    reply.status(201).send(task)
+    const res = await postTask(task)
+    if (!res) return reply.status(500).send(errorMessage) 
+    return reply.status(201).send(task)
 }
 
 const addTaskPost_settings = {
@@ -39,13 +41,13 @@ const addTaskPost_settings = {
 }
 
 async function updateTaskPut(request, reply) {
-    const data = getData()
-    const taskId = request.params.id
+    const id = request.params.id
     const taskData = JSON.parse(request.body)
+    const task = { id, ...taskData }
 
-    updateTask(data.tasks, taskId, taskData)
-    updateData(data)
-    reply.status(200).send({ message: 'OK' })
+    const res = await updateTask(task)
+    if (!res) return reply.status(500).send(errorMessage) 
+    return reply.status(200).send({ message: 'OK' })
 }
 
 const updateTaskPut_settings = {
@@ -73,16 +75,10 @@ const updateTaskPut_settings = {
 }
 
 async function deleteTaskDelete(request, reply) {
-  const data = getData()
-  const { tasks } = data
   const taskId = request.params.id
-  const updatedTasks = tasks.filter(e => e.id != taskId)
 
-  if (updatedTasks.length == tasks.length) reply.status(404).send({ message: 'Item not found' })
-  
-  tasks.splice(0, tasks.length, ...updatedTasks)
-
-  updateData(data)
+  const res = await deleteTask(taskId)
+  if (!res) return reply.status(500).send(errorMessage) 
   reply.status(200).send({ message: 'OK' })
 }
 

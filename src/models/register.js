@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt'
+import { v4 as uuidv4 } from 'uuid';
 
-import { getData, updateData } from "../funcs.js"
+import { postUser } from "../funcsDB.js"
 
 async function registerGet(request, reply) {
-    const { user } = getData()
-    return reply.status(200).render('register.pug', { user });
+    return reply.status(200).render('register.pug', {});
 }
 
 async function registerPost(request, reply) {
@@ -13,13 +13,13 @@ async function registerPost(request, reply) {
 
     const saltRounds = 8
     const passwordHash = await bcrypt.hash(password, saltRounds)
-    const data = getData()
-    data.user = {
+    const user = {
+        id: uuidv4(),
         login,
         password: passwordHash
     }
-    updateData(data)
-    reply.status(201).send(data.user)
+    postUser(user)
+    return reply.status(201).send(user)
 }
 
 export { registerGet, registerPost }

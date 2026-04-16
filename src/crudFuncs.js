@@ -9,16 +9,6 @@ const routesList = [
         cb: tasksGet
     },
     {
-        path: '/register',
-        method: 'get',
-        cb: registerGet
-    },
-    {
-        path: '/register',
-        method: 'post',
-        cb: registerPost
-    },
-    {
         path: '/add',
         method: 'post',
         cb: addTaskPost,
@@ -30,6 +20,21 @@ const routesList = [
         cb: updateTaskPut,
         settings: updateTaskPut_settings
     },
+        {
+        path: '/delete/:id',
+        method: 'delete',
+        cb: deleteTaskDelete
+    },
+    {
+        path: '/register',
+        method: 'get',
+        cb: registerGet
+    },
+    {
+        path: '/register',
+        method: 'post',
+        cb: registerPost
+    },
     {
         path: '/login',
         method: 'get',
@@ -40,11 +45,7 @@ const routesList = [
         method: 'post',
         cb: loginPost
     },
-    {
-        path: '/delete/:id',
-        method: 'delete',
-        cb: deleteTaskDelete
-    },
+
 ]
 
 export default routesList

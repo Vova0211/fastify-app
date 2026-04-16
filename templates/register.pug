@@ -13,9 +13,3 @@ html(lang="en")
       h2 Password
       input(type="password", name="password", id='password', required) 
       button(type="submit") Send
-    
-    if user.login.length != 0
-      p(class='login') Login: 
-        span=user.login
-      p(class='password') Password hash: 
-        span=user.password
