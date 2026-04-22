@@ -1,34 +1,22 @@
 import Fastify from 'fastify';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url'
+import 'dotenv/config'
 
-import routesList from './src/crudFuncs.js';
-import setRoutes from './src/setRoutes.js';
 import registerFastify from './src/registrations.js';
 
 const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const fastify = Fastify({
-  logger: true
-});
-
-export { fastify }
-
-fastify.decorate("authenticate", async function(request, reply) {
-  try {
-    await request.jwtVerify();
-  } catch (err) {
-    reply.send(err);
-  }
-});
+const fastify = Fastify({ logger: true });
 
 registerFastify(fastify, __filename)
-setRoutes(fastify, routesList)
 
 const start = async () => {
   try {
-    const settings = { port: 3000 }
-    await fastify.listen(settings);
-    console.log(`\nServer listening on http://localhost:${settings.port}`);
+    const port = process.env.PORT || 3000
+    await fastify.listen({ port });
+    console.log(`\nServer listening on http://localhost:${port}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

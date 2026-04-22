@@ -1,43 +1,36 @@
-import path from 'path'
-import fastifyView from '@fastify/view'
+import { dirname, join } from 'path'
 import fastifyStatic from '@fastify/static'
-import fastifyFormbody from '@fastify/formbody';
-import fastifyJwt from 'fastify-jwt';
-import pug from 'pug'
+import fastifyJwt from 'fastify-jwt'
+import auth from './models/auth.js'
+import tasks from './models/tasks.js'
+import superbase from './config/db.js'
 
 export default function (fastify, filename) {
-  const __dirname = path.dirname(filename);
+  const __dirname = dirname(filename);
   const registrations = [
     {
       lib: fastifyJwt,
-      settings: {
-        secret: 'supersecretkey',
-        sign: {
-          expiresIn: '1h'
-        }
-      }
+      settings: { secret: process.env.JWT_SECRET }
     },
     {
       lib: fastifyStatic,
       settings: {
-        root: path.join(__dirname, 'scripts'),
-        prefix: '/scripts/',
+        root: join(__dirname, 'public'),
+        prefix: '/',
       }
     },
     {
-      lib: fastifyView,
-      settings: {
-        engine: {
-          pug: pug,
-        },
-        root: path.join(__dirname, 'templates'),
-        propertyName: 'render'
-      }
-    },
-    {
-      lib: fastifyFormbody,
+      lib: superbase,
       settings: {}
     },
+    {
+      lib: auth,
+      settings: { prefix: '/auth' }
+    },
+    {
+      lib: tasks,
+      settings: { prefix: '/api' }
+    }
   ]
 
   registrations.forEach(registration => {

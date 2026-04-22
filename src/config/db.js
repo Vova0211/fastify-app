@@ -1,12 +1,8 @@
-import { Pool } from 'pg';
 import 'dotenv/config';
+import fastifyPlugin from 'fastify-plugin';
+import { createClient } from '@supabase/supabase-js';
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+export default fastifyPlugin(async (fastify) => {
+    const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+    fastify.decorate('supabase', supabase);
 });
-
-export default pool

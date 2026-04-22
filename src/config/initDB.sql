@@ -1,11 +1,14 @@
-create table users(
+create table Users(
 	id varchar(36) PRIMARY KEY,
-	login varchar(255) not null,
+	login varchar(255) not null unique,
 	password varchar(255) not null,
-	isadmin boolean default false
+	createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-create table tasks(
+create table Items(
 	id varchar(36) PRIMARY KEY,
 	title text not null,
-  completed boolean default false
+  completed boolean default false,
+	user_id varchar(36),
+	createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	foreign key (user_id) references Users (id)
 );
