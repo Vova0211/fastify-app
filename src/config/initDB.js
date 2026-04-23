@@ -1,4 +1,4 @@
-import pool from "./db.js";
+// import pool from "./db.js";
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { readFileSync } from 'node:fs'

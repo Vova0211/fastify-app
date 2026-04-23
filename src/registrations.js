@@ -3,7 +3,6 @@ import fastifyStatic from '@fastify/static'
 import fastifyJwt from 'fastify-jwt'
 import auth from './models/auth.js'
 import tasks from './models/tasks.js'
-import superbase from './config/db.js'
 
 export default function (fastify, filename) {
   const __dirname = dirname(filename);
@@ -18,10 +17,6 @@ export default function (fastify, filename) {
         root: join(__dirname, 'public'),
         prefix: '/',
       }
-    },
-    {
-      lib: superbase,
-      settings: {}
     },
     {
       lib: auth,
