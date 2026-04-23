@@ -1,12 +1,10 @@
 import Fastify from 'fastify';
-import { dirname, join } from 'path';
 import { fileURLToPath } from 'url'
 import 'dotenv/config'
 
 import registerFastify from './src/registrations.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const fastify = Fastify({ logger: true });
 

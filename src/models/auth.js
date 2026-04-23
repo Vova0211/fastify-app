@@ -18,8 +18,7 @@ export default async function (fastify) {
     },
     validatorCompiler: ({ schema, method, url, httpPart }) => (data) => {
       try {
-        const parsedData = JSON.parse(data)
-        const result = schema.validateSync(parsedData)
+        const result = schema.validateSync(data)
         return { value: result }
       } catch (e) {
         return { error: e }
@@ -38,14 +37,16 @@ export default async function (fastify) {
       password: passwordHash
     }
     const { error } = await postUser(user)
-    if (error.code == '23505') return reply.code(400).send(message('Login already exists'));
+    if (error) return reply.status(400).send(message(error));
     return reply.status(201).send(user)
   })
 
   fastify.post('/login', async (request, reply) => {
-    const { login, password } = JSON.parse(request.body)
+    const { login, password } = request.body
+    console.log('\n', password, '\n');
     
     const { user, error } = getUser(login)
+    console.log('\n', user, '\n');
 
     if (!user || error) return reply.status(401).send(message('Invalid username or password'))
     if (!compare(password, user.password)) {

@@ -21,7 +21,7 @@ const API = {
   },
   async login(login, password) {
     const { contentType, bodyParser } = settings;
-    return fetch('/auth/register', {
+    return fetch('/auth/login', {
       method: "POST",
       headers: contentType(),
       body: bodyParser({ login, password })

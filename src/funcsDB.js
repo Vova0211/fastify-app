@@ -97,11 +97,8 @@ async function postUser(user) {
       .insert({
         id, login, password
       })
-    // pool.query(`
-    //   INSERT INTO users(id, login, password, ) 
-    //   VALUES ($1, $2, $3)`,
-    //   [ id, login, password ]
-    // )
+      .select()
+      
     return { succes: true }
   } catch(error) {
     return { error }
