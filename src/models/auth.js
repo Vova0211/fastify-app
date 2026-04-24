@@ -43,12 +43,9 @@ export default async function (fastify) {
 
   fastify.post('/login', async (request, reply) => {
     const { login, password } = request.body
-    console.log('\n', password, '\n');
-    
-    const { user, error } = getUser(login)
-    console.log('\n', user, '\n');
+    const { user, error } = await getUser(login)
 
-    if (!user || error) return reply.status(401).send(message('Invalid username or password'))
+    if (!user || error) return reply.status(400).send(message(error))
     if (!compare(password, user.password)) {
       return reply.status(401).send(message('Invalid username or password'))
     }

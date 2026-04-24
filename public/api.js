@@ -40,7 +40,23 @@ const API = {
       headers: { ...authBearer(token), ...contentType()},
       body: bodyParser({ title })
     })
-  }
+  },
+  async editTask(token, task) {
+    const { authBearer, bodyParser, contentType } = settings
+    const { id, completed } = task
+    return fetch(`/api/items/${id}`, {
+      method: "PUT",
+      headers: { ...authBearer(token), ...contentType()},
+      body: bodyParser({ completed })
+    })
+  },
+  async deleteTask(token, taskId) {
+    const { authBearer } = settings
+    return fetch(`/api/items/${taskId}`, {
+      method: "DELETE",
+      headers: authBearer(token)
+    })
+  },
 }
 
 export { API }

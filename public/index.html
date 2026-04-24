@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
+  <link rel="icon" href="data:," />
   <script type="module" defer src="./script.js"></script>
   <title>ToDoList</title>
 </head>
@@ -20,13 +21,14 @@
       </div>
     </form>
     <p class="answer"></p>
-    <button class="logOut">Log out</button>
   </div>
 
-  <main class="d-none">
+  <main>
+    <button class="logOut">Log out</button>
     <div class="createTask">
       <form class="taskForm">
-        <input type="text" name="title" placeholder="Task name">
+        <h2>Create task</h2>
+        <input type="text" name="title" placeholder="Task name" required>
         <button type="submit">Create</button>
       </form>
     </div>
@@ -36,7 +38,4 @@
     </div>
   </main>
 </body>
-<template id="taskTemp">
-
-</template>
 </html>

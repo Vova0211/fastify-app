@@ -1,6 +1,5 @@
-init:
+install:
 	npm ci
-	npm run initDB
 
 start:
 	npm start

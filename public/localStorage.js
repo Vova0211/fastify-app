@@ -6,6 +6,6 @@ export const LS = {
         return localStorage.getItem('token')    
     },
     clearToken() {
-        localStorage.clear()
+        localStorage.removeItem('token')
     }
 }
