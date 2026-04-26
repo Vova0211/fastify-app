@@ -7,3 +7,157 @@
 .answer {
     color: green;
 }
+
+/* Общие стили */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Стили для аутентификации */
+.auth {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.auth .title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.auth .errors {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Добавляем расстояние между дочерними элементами */
+}
+
+.authForm input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.authForm .actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.authForm button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.authForm button:hover {
+  background-color: #367c39;  /* darken */
+
+}
+
+.auth .answer {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+/* Стили для основной части сайта */
+main {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+main .logOut {
+  padding: 10px 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: block;
+  margin-left: auto;
+}
+
+main .logOut:hover {
+  background-color: #d32f2f;
+}
+
+.createTask {
+  margin-bottom: 20px;
+}
+
+.createTask .taskForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px
+}
+
+.createTask .taskForm h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.createTask .taskForm input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.createTask .taskForm button {
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.createTask .taskForm button:hover {
+  background-color: #1976D2;
+}
+
+.tasksBox h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* Стили для списка задач */
+.tasksList {
+  display: flex; /* Use flexbox for horizontal layout */
+  flex-direction: column; /* Stack items vertically */
+  gap: 10px; /* Adjust spacing between tasks */
+}
+
+.task {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
